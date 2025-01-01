@@ -1,0 +1,58 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs
+*.log
+debug.log
+error.log
+pm2.log
+pm2.pid
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build output
+dist/
+build/
+out/
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.sql
+*.pdb
+*.mdb
+*.log
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# React-specific
+node_modules/
+public/static/
+build/
+.cache/
+*.chunk.js
+*.map
+
+# Other files
+*.lock
+*.bak
