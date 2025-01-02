@@ -13,7 +13,7 @@ function OrderForm() {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/menu');
+        const response = await axios.get('https://full-stack-food-delivery-app.onrender.com/api/menu');
         setMenu(response.data); // Assuming the menu data comes as an array
       } catch (error) {
         console.error('Error fetching menu:', error);
@@ -44,12 +44,12 @@ function OrderForm() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:5000/api/order',
+        'https://full-stack-food-delivery-app.onrender.com/api/order',
         { items },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert('Order placed successfully');
-      setItems([]); // Clear the order after successful submission
+      setItems([]); 
     } catch (error) {
       console.error('Error placing order:', error);
       alert('Failed to place order');
