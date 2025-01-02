@@ -14,7 +14,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-const mongoURI = "mongodb://127.0.0.1:27017/food"; 
+const mongoURI = "mongodb+srv://purshottambajaj75:aYTq8MrAbo5DYeJw@cluster0.z4h8n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; 
 mongoose
   .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB connected successfully"))
