@@ -29,7 +29,7 @@ router.post('/register', async (req, res) => {
     await newUser.save();
     res.status(201).send('User registered');
   } catch (error) {
-    console.error('Registration error:', error); // Log any errors
+    console.error('Registration error:', error); 
     res.status(500).send('Server error');
   }
 });
@@ -49,7 +49,6 @@ router.post('/login', async (req, res, next) => {
       return res.status(404).send('User not found');
     }
 
-    // Log the stored hash and the password being entered (For debugging purposes)
     console.log('Stored Hash:', user.password);
     console.log('Entered Password:', password);
 
@@ -58,15 +57,13 @@ router.post('/login', async (req, res, next) => {
       return res.status(400).send('Invalid credentials');
     }
 
-    // Attach user information to the request object
     req.user = user;
 
-    // Call the next middleware to generate the JWT token
     next();
   } catch (error) {
     console.error('Login error:', error);
     return res.status(500).send('Server error');
   }
-}, generateToken); // Use the middleware after the login route
+}, generateToken); 
 
 module.exports = router;

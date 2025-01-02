@@ -173,6 +173,13 @@ function Menu() {
       >
         Order Now
       </Button>
+      <Button
+          variant="outlined"
+           color="primary"
+           onClick={() => navigate('/orders')}
+                    >
+                      View Your Orders
+                    </Button>
     </Container>
   );
 }
