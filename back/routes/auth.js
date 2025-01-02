@@ -1,38 +1,72 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User'); // Assuming your User model is in 'models/User'
+const generateToken = require('../middleware/generateToken'); // Import the JWT middleware
 const router = express.Router();
-  
 
+// Register Route
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
-  if (!username || !password) return res.status(400).send('Missing fields');
+
+  if (!username || !password) {
+    return res.status(400).send('Missing fields');
+  }
+
   try {
-    const newUser = new User({ username, password });
+    // Check if the user already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).send('User already exists');
+    }
+
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({ username, password: hashedPassword });
+
+    // Save the new user to the database
     await newUser.save();
     res.status(201).send('User registered');
   } catch (error) {
+    console.error('Registration error:', error); // Log any errors
     res.status(500).send('Server error');
   }
 });
 
-router.post('/login', async (req, res) => {
+// Login Route
+router.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
-  if (!username || !password) return res.status(400).send('Missing fields');
-  try {
-    const user = await User.findOne({ username });
-    if (!user) return res.status(404).send('User not found');
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).send('Invalid credentials');
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    
-    res.json({ token });
-  } catch (error) {
-    res.status(500).send('Server error');
+  if (!username || !password) {
+    return res.status(400).send('Missing fields');
   }
-});
+
+  try {
+    // Check if user exists
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Log the stored hash and the password being entered (For debugging purposes)
+    console.log('Stored Hash:', user.password);
+    console.log('Entered Password:', password);
+
+   if(password=== user.password)
+    if (!isMatch) {
+      return res.status(400).send('Invalid credentials');
+    }
+
+    // Attach user information to the request object
+    req.user = user;
+
+    // Call the next middleware to generate the JWT token
+    next();
+  } catch (error) {
+    console.error('Login error:', error);
+    return res.status(500).send('Server error');
+  }
+}, generateToken); // Use the middleware after the login route
 
 module.exports = router;
